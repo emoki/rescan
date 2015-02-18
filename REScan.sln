@@ -1,0 +1,58 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "REScan.MCode", "src\REScan.MCode\REScan.MCode.csproj", "{8521B28A-2241-4F03-9E3D-E8F6C6EC0D87}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "REScan.Data", "src\REScan.Data\REScan.Data.csproj", "{11E73F8C-3329-4CDA-B794-879045BE36E5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "REScan.IO", "src\REScan.IO\REScan.IO.csproj", "{C5D1B010-B807-4E6E-9410-D9A8B349C8F2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "REScan.IO.Tests", "test\REScan.IO.Tests\REScan.IO.Tests.csproj", "{9179AF06-5323-4B2A-900E-15DD292AD4EC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "REScan.Common", "src\REScan.Common\REScan.Common.csproj", "{E6AAA0A4-FE55-4CD9-B66C-09A99626019D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "REScan.MCode.Tests", "test\REScan.MCode.Tests\REScan.MCode.Tests.csproj", "{E78BC5AC-9FB3-4F92-8ED0-CA8B883B07DC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "REScan.Common.Tests", "test\REScan.Common.Tests\REScan.Common.Tests.csproj", "{35DF73D9-947E-45AD-B42C-B63EAB6030A0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8521B28A-2241-4F03-9E3D-E8F6C6EC0D87}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8521B28A-2241-4F03-9E3D-E8F6C6EC0D87}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8521B28A-2241-4F03-9E3D-E8F6C6EC0D87}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8521B28A-2241-4F03-9E3D-E8F6C6EC0D87}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11E73F8C-3329-4CDA-B794-879045BE36E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11E73F8C-3329-4CDA-B794-879045BE36E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11E73F8C-3329-4CDA-B794-879045BE36E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11E73F8C-3329-4CDA-B794-879045BE36E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5D1B010-B807-4E6E-9410-D9A8B349C8F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5D1B010-B807-4E6E-9410-D9A8B349C8F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5D1B010-B807-4E6E-9410-D9A8B349C8F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5D1B010-B807-4E6E-9410-D9A8B349C8F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9179AF06-5323-4B2A-900E-15DD292AD4EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9179AF06-5323-4B2A-900E-15DD292AD4EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9179AF06-5323-4B2A-900E-15DD292AD4EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9179AF06-5323-4B2A-900E-15DD292AD4EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6AAA0A4-FE55-4CD9-B66C-09A99626019D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6AAA0A4-FE55-4CD9-B66C-09A99626019D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6AAA0A4-FE55-4CD9-B66C-09A99626019D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6AAA0A4-FE55-4CD9-B66C-09A99626019D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E78BC5AC-9FB3-4F92-8ED0-CA8B883B07DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E78BC5AC-9FB3-4F92-8ED0-CA8B883B07DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E78BC5AC-9FB3-4F92-8ED0-CA8B883B07DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E78BC5AC-9FB3-4F92-8ED0-CA8B883B07DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35DF73D9-947E-45AD-B42C-B63EAB6030A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35DF73D9-947E-45AD-B42C-B63EAB6030A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35DF73D9-947E-45AD-B42C-B63EAB6030A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35DF73D9-947E-45AD-B42C-B63EAB6030A0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
