@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 using REScan.Data;
 using REScan.Common;
 
@@ -18,7 +19,7 @@ namespace REScan.IO {
             return "GSM";
         }
         public override string Extension() {
-            return "wnd";
+            return FileUtility.GsmExtension();
         }
         protected override string Header() {
             if(CurrentVersion.Equals(Version.Unknown))
@@ -115,6 +116,19 @@ namespace REScan.IO {
         }
         protected override int BinaryStructByteSize() {
             return 59;
+        }
+        protected override void outputRedEyeAnalysisFormat(TextWriter writer, Gsm meas, Meta meta) {
+            base.outputRedEyeAnalysisFormat(writer, meas, meta);
+            string s = "";
+            s += meas.CollectionRound; s += RedeyeDelimiter;
+            s += meas.Channel; s += RedeyeDelimiter;
+            s += meas.Frequency / 1e6; s += RedeyeDelimiter;
+            s += meas.CarrierSignalLevel; s += RedeyeDelimiter;
+            s += meas.Bsic; s += RedeyeDelimiter;
+            s += meas.SignalLevel; s += RedeyeDelimiter;
+            s += meas.CToI; s += RedeyeDelimiter;
+            s += "g_"; s += meas.Bsic; s += "_"; s += (meas.Frequency / 1e5).ToString("00000"); s = s.Insert(s.Length - 1, "_");
+            writer.WriteLine(s);        
         }
         protected enum Version {
             Unknown,

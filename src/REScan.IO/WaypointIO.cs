@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using REScan.Data;
+using REScan.Common;
 
 namespace REScan.IO {
     public class WaypointIO : DataIO<Waypoint> {
@@ -11,7 +12,10 @@ namespace REScan.IO {
             return "WAYPOINT";
         }
         public override string Extension() {
-            return "wpt";
+            return FileUtility.WaypointExtension();
+        }
+        public override string REAnalysisExtension() {
+            throw new NotSupportedException(DataType() + " does not support REAnalysis format.");
         }
         protected override string Header() {
             return "point_longitude";

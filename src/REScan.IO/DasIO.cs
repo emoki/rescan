@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 using REScan.Data;
+using REScan.Common;
 
 namespace REScan.IO {
     public class DasIO : DataIO<Das> {
@@ -18,7 +20,7 @@ namespace REScan.IO {
             return "DAS";
         }
         public override string Extension() {
-            return "dmm";
+            return FileUtility.DasExtension();
         }
         protected override string Header() {
             if(CurrentVersion.Equals(Version.Unknown))
@@ -114,6 +116,22 @@ namespace REScan.IO {
         private Das ParseV3(string txt) {
             // Implement once REScan is using the newest das_processor.dll.
             throw new NotImplementedException();
+        }
+        protected override void outputRedeyeAnalysisHeader(TextWriter writer) {
+            writer.WriteLine("FileName\tUmtsAsnVersion1.0.0Latitude\tLongitude\tScannerID\tDate\tTime\tHGT_AGL\tMeasCount\tCenterFreq\tCarrierSL\tBroadcastCode\tCPICH RSCP\tInterference\tSecCode");
+        }
+        protected override void outputRedEyeAnalysisFormat(TextWriter writer, Das meas, Meta meta) {
+            base.outputRedEyeAnalysisFormat(writer, meas, meta);
+            string s = "";
+            s += meas.CollectionRound; s += RedeyeDelimiter;
+            //s += meas.Frequency / 1e5; s += RedeyeDelimiter;
+            s += meas.Frequency / 1e6; s += RedeyeDelimiter;
+            s += meas.CarrierSignalLevel; s += RedeyeDelimiter;
+            s += meas.TransmitterCode; s += RedeyeDelimiter;
+            s += meas.TransmitterSignalLevel; s += RedeyeDelimiter;
+            s += meas.Ecio; s += RedeyeDelimiter;
+            s += "d_"; s += meas.TransmitterCode; s += "_"; s += (meas.Frequency / 1e5).ToString("00000"); s = s.Insert(s.Length - 1, "_");
+            writer.WriteLine(s);
         }
         protected enum Version {
             Unknown,

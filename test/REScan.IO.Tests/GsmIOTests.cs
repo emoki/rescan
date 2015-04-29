@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using REScan.IO;
+using REScan.Data;
 using Xunit;
 
 namespace REScan.IO.Tests
@@ -69,6 +70,17 @@ namespace REScan.IO.Tests
             // TODO - Verify our method for calculating CarrierSL is correct.
             //Assert.Equal(, rowEnd.CarrierSignalLevel);
        }
+
+        [Fact]
+        public void VerifyRedeyeFormatOutput() {
+            var fileName = "../../../../test_files/test_io.wnd";
+
+            var io = new GsmIO();
+            var list = io.ReadFile(fileName);
+
+            var meta = new Meta(fileName);
+            io.OutputRedeyeAnalysisFile("../../../../test_files/RedeyeFormat.gsm.wna", list, meta);
+        }
 
         [Fact]
         public void VerifyExceptions() {

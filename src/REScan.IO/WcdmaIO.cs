@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 using REScan.Data;
+using REScan.Common;
 
 namespace REScan.IO {
     public class WcdmaIO : DataIO<Wcdma> {
@@ -11,7 +13,7 @@ namespace REScan.IO {
             return "WCDMA";
         }
         public override string Extension() {
-            return "wnu";
+            return FileUtility.WcdmaExtension();
         }
         protected override string Header() {
             return "UmtsVersion3.0.0.10|WIND3GVer1.2";
@@ -47,7 +49,6 @@ namespace REScan.IO {
             wcdma.Rscp = (sbyte)binary[index]; index += 1; //uint8_t CPICH_RSCP;
             wcdma.Ecio = BitConverter.ToSingle(binary, index); index += 4; //float CPICH_EcIo;
             index += 1; //bool STTD;
-            index += 4; //uint32_t StatusFlags;
             var statusFlag = BitConverter.ToUInt32(binary, index); index += 4; // uint32_t StatusFlags
             wcdma.IsGpsLocked = (statusFlag & 0x0001) == 0x0; // bit 0 of status_flags is gps_lock; 0 => gps lock; 1 => NOT gps lock .
             index += 2; //uint16_t SystemFrameNumber;
@@ -68,5 +69,19 @@ namespace REScan.IO {
         protected override int BinaryStructByteSize() {
             return 76;
         }
+        protected override void outputRedEyeAnalysisFormat(TextWriter writer, Wcdma meas, Meta meta) {
+            base.outputRedEyeAnalysisFormat(writer, meas, meta);
+            string s = "";
+            s += meas.CollectionRound; s += RedeyeDelimiter;
+            s += meas.Channel; s += RedeyeDelimiter;
+            s += meas.Frequency / 1e6; s += RedeyeDelimiter;
+            s += meas.CarrierSignalLevel; s += RedeyeDelimiter;
+            s += meas.Cpich; s += RedeyeDelimiter;
+            s += meas.Rscp; s += RedeyeDelimiter;
+            s += meas.Ecio; s += RedeyeDelimiter;
+            s += "u_"; s += meas.Cpich; s += "_"; s += (meas.Frequency / 1e5).ToString("00000"); s = s.Insert(s.Length - 1, "_");
+            writer.WriteLine(s);
+        }
+
     }
 }

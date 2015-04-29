@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 using REScan.Data;
+using REScan.Common;
 
 namespace REScan.IO {
     public class LteIO : DataIO<Lte> {
@@ -11,7 +13,7 @@ namespace REScan.IO {
             return "LTE";
         }
         public override string Extension() {
-            return "wnl";
+            return FileUtility.LteExtension();
         }
         protected override string Header() {
             return "lte_raw_1.1.0.10|WIND3GVer1.2";
@@ -39,8 +41,10 @@ namespace REScan.IO {
 
             foreach(var lte in list) {
                 var decodedLte = decodedMeasurements.Find((tmp) => lte.Frequency.Equals(tmp.Frequency));
-                lte.CarrierBandwidth = decodedLte.CarrierBandwidth;
-                lte.NumAntennaPort = decodedLte.NumAntennaPort;
+                if(decodedLte != null) {
+                    lte.CarrierBandwidth = decodedLte.CarrierBandwidth;
+                    lte.NumAntennaPort = decodedLte.NumAntennaPort;
+                }
             }
         }
         protected override Lte Parse(byte[] binary) {
@@ -101,5 +105,19 @@ namespace REScan.IO {
         protected override int BinaryStructByteSize() {
             return 182;
         }
+        protected override void outputRedEyeAnalysisFormat(TextWriter writer, Lte meas, Meta meta) {
+            base.outputRedEyeAnalysisFormat(writer, meas, meta);
+            string s = "";
+            s += meas.CollectionRound; s += RedeyeDelimiter;
+            s += meas.Channel; s += RedeyeDelimiter;
+            s += meas.Frequency / 1e6; s += RedeyeDelimiter;
+            s += meas.CarrierSignalLevel; s += RedeyeDelimiter;
+            s += meas.PhysicalCellid; s += RedeyeDelimiter;
+            s += meas.Rsrp; s += RedeyeDelimiter;
+            s += meas.Rsrq; s += RedeyeDelimiter;
+            s += "l_"; s += meas.PhysicalCellid; s += "_"; s += (meas.Frequency / 1e5).ToString("00000"); s = s.Insert(s.Length - 1, "_");
+            writer.WriteLine(s);
+        }
+
     }
 }

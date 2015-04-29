@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using REScan.IO;
+using REScan.Data;
 using Xunit;
 
 namespace REScan.IO.Tests {
@@ -67,6 +68,17 @@ namespace REScan.IO.Tests {
         }
 
         [Fact]
+        public void VerifyRedeyeFormatOutput() {
+            var fileName = "../../../../test_files/test_io_v1.dmm";
+
+            var io = new DasIO();
+            var list = io.ReadFile(fileName);
+
+            var meta = new Meta(fileName);
+            io.OutputRedeyeAnalysisFile("../../../../test_files/RedeyeFormat.das.wna", list, meta);
+        }
+
+        [Fact]
         public void VerifyExceptions() {
             var noFile = "../../../../test_files/not_there";
             var badHeader = "../../../../test_files/bad_header.txt";
@@ -74,6 +86,7 @@ namespace REScan.IO.Tests {
             var exNoFile = Assert.Throws<FileNotFoundException>(() => { io.ReadFile(noFile); });
             var exbadHeader = Assert.Throws<FormatException>(() => { io.ReadFile(badHeader); });
         }
+
         [Fact]
         public void VerifyBadSizeExceptions() {
             var badSizeV1 = "../../../../test_files/bad_size_v1.dmm";

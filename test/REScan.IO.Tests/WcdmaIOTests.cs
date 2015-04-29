@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using REScan.IO;
+using REScan.Data;
 using Xunit;
 
 namespace REScan.IO.Tests {
@@ -67,6 +68,17 @@ namespace REScan.IO.Tests {
             Assert.Equal(true, rowEnd.IsGpsLocked);
         }
 
+        [Fact]
+        public void VerifyRedeyeFormatOutput() {
+            var fileName = "../../../../test_files/test_io.wnu";
+
+            var io = new WcdmaIO();
+            var list = io.ReadFile(fileName);
+
+            var meta = new Meta(fileName);
+            io.OutputRedeyeAnalysisFile("../../../../test_files/RedeyeFormat.wdma.wna", list, meta);
+        }
+        
         [Fact]
         public void VerifyExceptions() {
             var noFile = "../../../../test_files/not_there";
