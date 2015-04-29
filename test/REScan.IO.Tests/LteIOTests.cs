@@ -50,6 +50,7 @@ namespace REScan.IO.Tests {
             Assert.True(Data.Utility.Uninitialized(row1.Height));
             Assert.Equal((long)Math.Round(row1.Microframes / (100e6)), row1.Time);
             Assert.True(Data.Utility.Uninitialized(row1.Height));
+            Assert.Equal(true, row1.IsGpsLocked);
 
             // Verify last row.
             var rowEnd = lteList[lteList.Count - 1];
@@ -75,6 +76,8 @@ namespace REScan.IO.Tests {
             Assert.True(Data.Utility.Uninitialized(rowEnd.PixelY));
             Assert.Equal((long)Math.Round(rowEnd.Microframes / (100e6)), rowEnd.Time);
             Assert.True(Data.Utility.Uninitialized(rowEnd.Height));
+            Assert.Equal(true, rowEnd.IsGpsLocked);
+        }
         }
 
         [Fact]

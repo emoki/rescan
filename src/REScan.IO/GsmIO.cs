@@ -65,7 +65,8 @@ namespace REScan.IO {
             gsm.Microframes = (long)BitConverter.ToUInt64(binary, index); index += 8; //unsigned __int64 MicroFramesRX;
             index += 4; //unsigned __int32 TDMAFrameNum;
             index += 4; //float SynchCorr;
-            index += 4; //unsigned __int32 StatusFlags;
+            var statusFlag = BitConverter.ToUInt32(binary, index); index += 4; // uint32_t StatusFlags
+            gsm.IsGpsLocked = (statusFlag & 0x0001) == 0x0; // bit 0 of status_flags is gps_lock; 0 => gps lock; 1 => NOT gps lock .
             gsm.CToI = BitConverter.ToSingle(binary, index); index += 4; //float CtoI;
 
             // Conversions.

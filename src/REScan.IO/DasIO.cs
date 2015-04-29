@@ -77,7 +77,8 @@ namespace REScan.IO {
             das.Frequency = long.Parse(row[index++]);
             das.CarrierBandwidth = int.Parse(row[index++]);
             das.Time = long.Parse(row[index++]);
-            index++; // status_flags
+            var statusFlag = uint.Parse(row[index++]);
+            das.IsGpsLocked = (statusFlag & 0x0001) == 0x0; // bit 0 of status_flags is gps_lock; 0 => gps lock; 1 => NOT gps lock .
             return das;
         }
 
@@ -106,7 +107,8 @@ namespace REScan.IO {
             das.Frequency = long.Parse(row[index++]);
             das.CarrierBandwidth = int.Parse(row[index++]);
             das.Time = long.Parse(row[index++]);
-            index++; // status_flags
+            var statusFlag = uint.Parse(row[index++]);
+            das.IsGpsLocked = (statusFlag & 0x0001) == 0x0; // bit 0 of status_flags is gps_lock; 0 => gps lock; 1 => NOT gps lock .
             return das;
         }
         private Das ParseV3(string txt) {

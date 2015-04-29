@@ -48,6 +48,8 @@ namespace REScan.IO {
             wcdma.Ecio = BitConverter.ToSingle(binary, index); index += 4; //float CPICH_EcIo;
             index += 1; //bool STTD;
             index += 4; //uint32_t StatusFlags;
+            var statusFlag = BitConverter.ToUInt32(binary, index); index += 4; // uint32_t StatusFlags
+            wcdma.IsGpsLocked = (statusFlag & 0x0001) == 0x0; // bit 0 of status_flags is gps_lock; 0 => gps lock; 1 => NOT gps lock .
             index += 2; //uint16_t SystemFrameNumber;
             index += 2; //uint16_t MCC;
             index += 2; //uint16_t MNC;

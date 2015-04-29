@@ -29,7 +29,7 @@ namespace REScan.IO.Tests {
             var row1 = wptList[0];
             Assert.Equal(-97.7407531738281, row1.ScannerLon, 5);
             Assert.Equal(30.2816543579102, row1.ScannerLat, 5);
-            Assert.Equal(false, row1.GpsLock);
+            Assert.Equal(false, row1.IsGpsLocked);
             Assert.Equal(0, row1.Height);
             Assert.Equal(".jpg", row1.ImageFileName);
 
@@ -45,7 +45,7 @@ namespace REScan.IO.Tests {
             var rowEnd = wptList[wptList.Count - 1];
             Assert.Equal(-97.7407531738281, rowEnd.ScannerLon, 5);
             Assert.Equal(30.2816543579102, rowEnd.ScannerLat, 5);
-            Assert.Equal(false, rowEnd.GpsLock);
+            Assert.Equal(false, rowEnd.IsGpsLocked);
             Assert.Equal(".jpg", rowEnd.ImageFileName);
 
             Assert.Equal("13001", rowEnd.ScannerID);

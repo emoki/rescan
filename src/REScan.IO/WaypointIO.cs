@@ -37,7 +37,7 @@ namespace REScan.IO {
             wpt.ScannerID = (row[i++]).Trim();
             wpt.ScannerLat = double.Parse(row[i++]);
             wpt.ScannerLon = double.Parse(row[i++]);
-            wpt.GpsLock = bool.Parse(row[i++]);
+            wpt.IsGpsLocked = bool.Parse(row[i++]);
             wpt.ImageFileName = (row[i++]).Trim();
             wpt.Height = int.Parse(row[i++]);
 

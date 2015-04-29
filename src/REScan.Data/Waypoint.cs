@@ -25,7 +25,6 @@ namespace REScan.Data
         }
         public double ScannerLon;
         public double ScannerLat;
-        public bool GpsLock;
         public string ImageFileName;
     }
 }

@@ -43,6 +43,7 @@ namespace REScan.IO.Tests {
             Assert.True(Data.Utility.Uninitialized(row1.Height));
             Assert.Equal(1401219909, row1.Time);
             Assert.True(Data.Utility.Uninitialized(row1.Height));
+            Assert.Equal(false, row1.IsGpsLocked);
 
             // Verify last row.
             var rowEnd = dasList[dasList.Count - 1];
@@ -62,6 +63,7 @@ namespace REScan.IO.Tests {
             Assert.True(Data.Utility.Uninitialized(rowEnd.PixelY));
             Assert.Equal(1401220133, rowEnd.Time);
             Assert.True(Data.Utility.Uninitialized(rowEnd.Height));
+            Assert.Equal(false, rowEnd.IsGpsLocked);
         }
 
         [Fact]

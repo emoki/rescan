@@ -44,6 +44,7 @@ namespace REScan.IO.Tests
             Assert.Equal((long)Math.Round(row1.Microframes / (5200e6 / 24)), row1.Time);
             Assert.True(Data.Utility.Uninitialized(row1.Height));
             Assert.Equal(200000, row1.CarrierBandwidth);
+            Assert.Equal(true, row1.IsGpsLocked);
             // TODO - Verify our method for calculating CarrierSL is correct.
             //Assert.Equal(, row1.CarrierSignalLevel);
 
@@ -64,6 +65,7 @@ namespace REScan.IO.Tests
             Assert.Equal((long)Math.Round(rowEnd.Microframes / (5200e6 / 24)), rowEnd.Time);
             Assert.True(Data.Utility.Uninitialized(rowEnd.Height));
             Assert.Equal(200000, rowEnd.CarrierBandwidth);
+            Assert.Equal(true, rowEnd.IsGpsLocked);
             // TODO - Verify our method for calculating CarrierSL is correct.
             //Assert.Equal(, rowEnd.CarrierSignalLevel);
        }
