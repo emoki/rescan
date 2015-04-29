@@ -35,6 +35,9 @@ namespace REScan.MCode
             // position when interpolating.
             BinTimeUsingCollectionRound(measurements);
 
+            // Fix DAS discrepancy dealing with high / calculated gain.
+            RemoveBadEcIos(measurements);
+
             PerformInterpolation(measurements, waypoints);
         }
         private void RemoveOldMeasurementsUsingCollectionRound<T>(List<T> measurements) where T : Measurement {
@@ -81,7 +84,6 @@ namespace REScan.MCode
                 }
             }
         }
-
         private static int CalculateAverageTime<T>(List<T> measurements, int i) where T : Measurement {
             int j = i;
             double total = 0;
@@ -101,6 +103,16 @@ namespace REScan.MCode
 
             i = j;
             return i;
+        }
+        public void RemoveBadEcIos<T>(List<T> measurements) where T : Measurement {
+            // For the algorithm to work correctly BinTimeUsingCollectionRound must be run first.
+            // Due to EcIo discrepancies that can occur in DAS when using Wider's gain algorithm.  We throw away the lowest EcIo for a Tx if
+            // the gap is too large.
+            if(measurements[0] is Das) {
+                List<Das> dasList = measurements.Cast<Das>().ToList();
+                var newList = dasList.GroupBy(meas => meas.Time).Select(g => g.GroupBy(meas => meas.TransmitterCode).Select(gp => gp.OrderBy(meas => meas.Ecio).Last())).SelectMany(meas => meas).ToList();
+                measurements.RemoveAll(meas => !newList.Exists(d => d == meas));
+           } 
         }
         private void PerformInterpolation<T>(List<T> measurements, List<Waypoint> waypoints) where T : Measurement {
             var before = 0;

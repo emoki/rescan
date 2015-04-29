@@ -68,8 +68,9 @@ namespace REScan.MCode.Tests
             Interpolator interpolator = new Interpolator();
             interpolator.Interpolate(DasMeasurements, Waypoints);
 
-            Assert.Equal(96, DasMeasurements.Count);
-            Assert.Equal(avg, DasMeasurements[0].Time);
+            for(int i = 0; i < 2; ++i) {
+                Assert.Equal(avg, DasMeasurements[i].Time);
+            }
         }
         [Fact]
         void TestDasTimeBinning() {
@@ -83,11 +84,33 @@ namespace REScan.MCode.Tests
 
             interpolator.Interpolate(DasMeasurements, Waypoints);
 
-            for(int i = 0; i < 10; ++i) {
+            for(int i = 0; i < 2; ++i) {
                 Assert.Equal(avg, DasMeasurements[i].Time);
             }
         }
         [Fact]
+        void TestDasEcioRemoval() {   
+            Reset();
+
+            DasMeasurements[29].TransmitterCode = "A";
+
+            var size = DasMeasurements.Count;
+
+            Interpolator interpolator = new Interpolator();
+            interpolator.Interpolate(DasMeasurements, Waypoints);
+
+            Assert.Equal(12, DasMeasurements.Count);
+
+            Assert.Equal("A", DasMeasurements[0].TransmitterCode);
+            Assert.Equal(8, DasMeasurements[0].Ecio);
+            Assert.Equal("B", DasMeasurements[1].TransmitterCode);
+            Assert.Equal(9, DasMeasurements[1].Ecio);
+            Assert.Equal("B", DasMeasurements[2].TransmitterCode);
+            Assert.Equal(27, DasMeasurements[2].Ecio);
+            Assert.Equal("A", DasMeasurements[3].TransmitterCode);
+            Assert.Equal(29, DasMeasurements[3].Ecio);
+        }
+       [Fact]
         void TestInterpolation() {
             Reset();
             Interpolator interpolator = new Interpolator();
@@ -121,6 +144,7 @@ namespace REScan.MCode.Tests
                 Measurements.Add(meas);
             }
             cr = 0;
+            var ecio = 0;
             for(int i = 0; i <= 100; ++i) {
                 if(i % 10 == 0)
                     ++cr;
@@ -131,6 +155,9 @@ namespace REScan.MCode.Tests
                 meas.CarrierBandwidth = 10000;
                 meas.CarrierSignalLevel = -70;
                 meas.Frequency = 1960000000;
+                meas.TransmitterCode = i % 2 == 0 ? "A" : "B";
+                meas.Ecio = ecio++;
+
                 DasMeasurements.Add(meas);
             }
             for(int i = 0; i <= 10; ++i) {
