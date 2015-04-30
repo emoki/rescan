@@ -59,7 +59,7 @@ namespace REScan.IO {
         }
         private Das ParseV1(string txt) {
             var row = txt.Split('\t');
-            if(!row.Count().Equals(16))
+            if(row.Count() < 16)
                 ThrowParseException(Version.V1PlainText);
 
             var index = 0;
@@ -85,12 +85,12 @@ namespace REScan.IO {
         }
 
         private void ThrowParseException(Version version) {
-            throw new FormatException("Unable to parse " + System.Enum.GetName(typeof(Version), version) + ".  Wrong number of items.");
+            throw new FormatException("Unable to parse " + System.Enum.GetName(typeof(Version), version) + " file.  Not enough columns.");
         }
         private Das ParseV2(string txt) {
             var row = txt.Split('\t');
-            if(!row.Count().Equals(16))
-                ThrowParseException(Version.V1PlainText);
+            if(row.Count() < 16)
+                ThrowParseException(Version.V2PlainText);
 
             var index = 0;
             Das das = new Das();

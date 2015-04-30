@@ -28,8 +28,8 @@ namespace REScan.IO {
         }
         protected override Waypoint Parse(string txt) {
             var row = txt.Split('\t');
-            if(!row.Count().Equals(11))
-                throw new FormatException("Unable to parse " + DataType() + ".  Wrong number of items.");
+            if(row.Count() < 11)
+                throw new FormatException("Unable to parse " + DataType() + " file.  Not enough columns.");
 
             var i = 0;
             Waypoint wpt = new Waypoint();
