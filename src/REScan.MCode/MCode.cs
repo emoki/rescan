@@ -26,6 +26,8 @@ namespace REScan.MCode
                 throw new ArgumentException("Unable to interpolate.  Too many Scanner IDs within measurements.");
 
             measurements.Sort((meas1, meas2) => meas1.Time.CompareTo(meas2.Time));
+            measurements.Sort((meas1, meas2) => meas1.CollectionRound.CompareTo(meas2.CollectionRound));
+            
             waypoints.Sort((wpt1, wpt2) => wpt1.Time.CompareTo(wpt2.Time));
 
             // Apply bug fix.  Columbus (dascontrol) sometimes outputs old measurements that are cached when starting a new collection file.
@@ -109,10 +111,48 @@ namespace REScan.MCode
             // Due to EcIo discrepancies that can occur in DAS when using Wider's gain algorithm.  We throw away the lowest EcIo for a Tx if
             // the gap is too large.
             if(measurements[0] is Das) {
-                List<Das> dasList = measurements.Cast<Das>().ToList();
-                var newList = dasList.GroupBy(meas => meas.Time).Select(g => g.GroupBy(meas => meas.TransmitterCode).Select(gp => gp.OrderBy(meas => meas.Ecio).Last())).SelectMany(meas => meas).ToList();
-                measurements.RemoveAll(meas => !newList.Exists(d => d == meas));
+                var dasList = measurements.Cast<Das>().ToList();
+                var removalList = new List<Das>();
+                var i = 0;
+                // Adjust any measurement that appear at that may appear at the beginning
+                while(i < dasList.Count) {
+                    if(dasList[i].CollectionRound % 2 == 0)
+                        break;
+                    i = KeepOnlyHighestEcios(dasList, i, removalList);
+                }
+                while(i < dasList.Count) {
+                    if(dasList[i].CollectionRound % 2 == 0) {
+                        i = KeepOnlyHighestEcios(dasList, i, removalList);
+                    }
+                    else
+                        ++i;
+                }
+                measurements.RemoveAll(meas => removalList.Exists(d => d == meas));
            } 
+        }
+
+        private int KeepOnlyHighestEcios(List<Das> dasList, int i, List<Das> removalList) {
+            var tmpList = new List<Das>();
+            int j = i;
+            do {
+                tmpList.Add(dasList[j]);
+                if(++j >= dasList.Count)
+                    break;
+            } while(dasList[i].CollectionRound == dasList[j].CollectionRound || dasList[j].CollectionRound % 2 != 0);
+
+            var list1 = tmpList.GroupBy(meas => meas.Frequency).Select(g => g.GroupBy(meas => meas.TransmitterCode).Select(gp => gp.OrderBy(meas => meas.Ecio)));
+            var tmpRemove = new List<Das>();
+            foreach(var freqGroup in list1) {
+                foreach(var txGroup in freqGroup) {
+                    for(var k = 0; k < txGroup.Count() - 1; ++k) {
+                        tmpRemove.Add(txGroup.ElementAt(k));
+                    }
+                }
+            }
+            removalList.AddRange(tmpRemove);
+            i = j;
+            return i;
+
         }
         private void PerformInterpolation<T>(List<T> measurements, List<Waypoint> waypoints) where T : Measurement {
             var before = 0;
