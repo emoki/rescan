@@ -19,7 +19,7 @@ namespace REScan.MCode
             if(waypoints.Count < 1)
                 throw new ArgumentException("Unable to interpolate.  Waypoint list is empty.");
             var wptScannerIDs = waypoints.GroupBy(wpt => wpt.ScannerID).Select(wpt => wpt.First()).ToList();
-            if(wptScannerIDs.Count() > 1)
+            if(wptScannerIDs.Count() > 2 || (wptScannerIDs.Count() > 1 && !wptScannerIDs.Exists(wpt => wpt.ScannerID.Equals("0"))))
                 throw new ArgumentException("Unable to interpolate.  Too many Scanner IDs within waypoints.");
             var measScannerIDs = measurements.GroupBy(meas => meas.ScannerID).Select(meas=> meas.First()).ToList();
             if(measScannerIDs.Count() > 1)
