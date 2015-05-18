@@ -118,13 +118,13 @@ namespace REScan.IO {
             throw new NotImplementedException();
         }
         protected override void outputRedeyeAnalysisHeader(TextWriter writer) {
-            writer.WriteLine("FileName\tUmtsAsnVersion1.0.0Latitude\tLongitude\tScannerID\tDate\tTime\tHGT_AGL\tMeasCount\tCenterFreq\tCarrierSL\tBroadcastCode\tCPICH RSCP\tInterference\tSecCode");
+            writer.WriteLine("FileName\tUmtsAsnVersion1.0.0Latitude\tLongitude\tScannerID\tDate\tTime\tHGT_AGL\tMeasCount\tUARFCN\tCenterFreq\tCarrierSL\tBroadcastCode\tCPICH RSCP\tInterference\tSecCode");
         }
         protected override void outputRedEyeAnalysisFormat(TextWriter writer, Das meas, Meta meta) {
             base.outputRedEyeAnalysisFormat(writer, meas, meta);
             string s = "";
             s += meas.CollectionRound; s += RedeyeDelimiter;
-            //s += meas.Frequency / 1e5; s += RedeyeDelimiter;
+            s += 111; s += RedeyeDelimiter;
             s += meas.Frequency / 1e6; s += RedeyeDelimiter;
             s += meas.CarrierSignalLevel; s += RedeyeDelimiter;
             s += meas.TransmitterCode; s += RedeyeDelimiter;
