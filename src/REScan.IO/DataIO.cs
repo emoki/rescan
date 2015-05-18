@@ -55,9 +55,14 @@ namespace REScan.IO
 
                 // Begin populating records till end of file. 
                 while(reader.Peek() != -1) {
-                    var record = Parse(reader.ReadLine());
-                    records.Add(record);
-                }
+                    try {
+                       var record = Parse(reader.ReadLine());
+                       records.Add(record);
+                    }
+                    catch(FormatException format) {
+                        ErrorList.Add("Error in fileName: " + format.Message);
+                    }
+             }
 
                 return records;
             }
@@ -73,8 +78,13 @@ namespace REScan.IO
 
                 // Begin populating records till end of file. 
                 while(reader.BaseStream.Position != reader.BaseStream.Length) {
-                    var record = Parse(reader.ReadBytes(BinaryStructByteSize()));
-                    records.Add(record);
+                    try {
+                        var record = Parse(reader.ReadBytes(BinaryStructByteSize()));
+                        records.Add(record);
+                    }
+                    catch(FormatException format) {
+                        ErrorList.Add("Error in fileName: " + format.Message);
+                    }
                 }
 
                 return records;
@@ -117,5 +127,7 @@ namespace REScan.IO
         }
         protected int MaxHeaderLength = 10240;
         protected string RedeyeDelimiter = "\t";
+
+        public List<string> ErrorList = new List<string>();
     }
 }
