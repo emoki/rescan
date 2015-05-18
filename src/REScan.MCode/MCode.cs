@@ -13,7 +13,7 @@ namespace REScan.MCode
         // Interpolation will assign a position to each measurement using time, based on the waypoint before and after the measurement.
         // Measurements that exist outside the first and last waypoint are removed.  
         // Note - We currently sort both the measurement list and waypoint list.
-        public void Interpolate<T>(List<T> measurements, List<Waypoint> waypoints) where T : Measurement {
+        public void Interpolate<T>(ref List<T> measurements, List<Waypoint> waypoints) where T : Measurement {
             if(measurements.Count < 1)
                 throw new ArgumentException("Unable to interpolate.  Measurement list is empty.");
             if(waypoints.Count < 1)
@@ -25,20 +25,22 @@ namespace REScan.MCode
             if(measScannerIDs.Count() > 1)
                 throw new ArgumentException("Unable to interpolate.  Too many Scanner IDs within measurements.");
 
-            measurements.Sort((meas1, meas2) => meas1.Time.CompareTo(meas2.Time));
-            measurements.Sort((meas1, meas2) => meas1.CollectionRound.CompareTo(meas2.CollectionRound));
-            
-            waypoints.Sort((wpt1, wpt2) => wpt1.Time.CompareTo(wpt2.Time));
-
             // Apply bug fix.  Columbus (dascontrol) sometimes outputs old measurements that are cached when starting a new collection file.
             RemoveOldMeasurementsUsingCollectionRound(measurements);
+
+            measurements.Sort((meas1, meas2) => meas1.Time.CompareTo(meas2.Time));
+            measurements.Sort((meas1, meas2) => meas1.CollectionRound.CompareTo(meas2.CollectionRound));            
+            waypoints.Sort((wpt1, wpt2) => wpt1.Time.CompareTo(wpt2.Time));
 
             // We make sure all measurements within X collection rounds have the same time.  This ensures they receive the same interpolated
             // position when interpolating.
             BinTimeUsingCollectionRound(measurements);
 
             // Fix DAS discrepancy dealing with high / calculated gain.
-            RemoveBadEcIos(measurements);
+            RemoveBadEcIos(ref measurements);
+
+            measurements.Sort((meas1, meas2) => meas1.Time.CompareTo(meas2.Time));
+            waypoints.Sort((wpt1, wpt2) => wpt1.Time.CompareTo(wpt2.Time));
 
             PerformInterpolation(measurements, waypoints);
         }
@@ -106,7 +108,7 @@ namespace REScan.MCode
             i = j;
             return i;
         }
-        public void RemoveBadEcIos<T>(List<T> measurements) where T : Measurement {
+        public void RemoveBadEcIos<T>(ref List<T> measurements) where T : Measurement {
             // For the algorithm to work correctly BinTimeUsingCollectionRound must be run first.
             // Due to EcIo discrepancies that can occur in DAS when using Wider's gain algorithm.  We throw away the lowest EcIo for a Tx if
             // the gap is too large.
@@ -127,8 +129,9 @@ namespace REScan.MCode
                     else
                         ++i;
                 }
-                measurements.RemoveAll(meas => removalList.Exists(d => d == meas));
-           } 
+                //measurements.RemoveAll(meas => removalList.Exists(d => d == meas));
+                measurements = measurements.Except(removalList.Cast<T>()).ToList();
+            } 
         }
 
         private int KeepOnlyHighestEcios(List<Das> dasList, int i, List<Das> removalList) {

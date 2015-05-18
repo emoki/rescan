@@ -16,7 +16,7 @@ namespace REScan.MCode.Tests
             Reset();
             Measurements.Clear();
             Interpolator interpolator = new Interpolator();
-            var e = Assert.Throws<ArgumentException>(() => { interpolator.Interpolate(Measurements, Waypoints); });
+            var e = Assert.Throws<ArgumentException>(() => { interpolator.Interpolate(ref Measurements, Waypoints); });
             Assert.Equal("Unable to interpolate.  Measurement list is empty.", e.Message);
         }
         [Fact]
@@ -24,7 +24,7 @@ namespace REScan.MCode.Tests
             Reset();
             Waypoints.Clear();
             Interpolator interpolator = new Interpolator();
-            var e = Assert.Throws<ArgumentException>(() => { interpolator.Interpolate(Measurements, Waypoints); });
+            var e = Assert.Throws<ArgumentException>(() => { interpolator.Interpolate(ref Measurements, Waypoints); });
             Assert.Equal("Unable to interpolate.  Waypoint list is empty.", e.Message);
         }
         [Fact]
@@ -32,7 +32,7 @@ namespace REScan.MCode.Tests
             Reset();
             Waypoints[0].ScannerID = "badID";
             Interpolator interpolator = new Interpolator();
-            var e = Assert.Throws<ArgumentException>(() => { interpolator.Interpolate(Measurements, Waypoints); });
+            var e = Assert.Throws<ArgumentException>(() => { interpolator.Interpolate(ref Measurements, Waypoints); });
             Assert.Equal("Unable to interpolate.  Too many Scanner IDs within waypoints.", e.Message);
         }
         [Fact]
@@ -40,7 +40,7 @@ namespace REScan.MCode.Tests
             Reset();
             Measurements[0].ScannerID = "badID";
             Interpolator interpolator = new Interpolator();
-            var e = Assert.Throws<ArgumentException>(() => { interpolator.Interpolate(Measurements, Waypoints); });
+            var e = Assert.Throws<ArgumentException>(() => { interpolator.Interpolate(ref Measurements, Waypoints); });
             Assert.Equal("Unable to interpolate.  Too many Scanner IDs within measurements.", e.Message);
         }
         [Fact]
@@ -48,7 +48,7 @@ namespace REScan.MCode.Tests
             Reset();
             Waypoints[0].ImageFileName = "badImageFile";
             Interpolator interpolator = new Interpolator();
-            var e = Assert.Throws<ArgumentException>(() => { interpolator.Interpolate(Measurements, Waypoints); });
+            var e = Assert.Throws<ArgumentException>(() => { interpolator.Interpolate(ref Measurements, Waypoints); });
             Assert.Equal("The two waypoints used for interpolating the measurement's position do not match image filenames.", e.Message);
         }
         [Fact]
@@ -66,7 +66,7 @@ namespace REScan.MCode.Tests
             var avg = (long)Math.Round(sum / 5.0, 0);
 
             Interpolator interpolator = new Interpolator();
-            interpolator.Interpolate(DasMeasurements, Waypoints);
+            interpolator.Interpolate(ref DasMeasurements, Waypoints);
 
             for(int i = 0; i < 2; ++i) {
                 Assert.Equal(avg, DasMeasurements[i].Time);
@@ -82,7 +82,7 @@ namespace REScan.MCode.Tests
             }
             var avg = (long)Math.Round(sum / 10.0, 0);
 
-            interpolator.Interpolate(DasMeasurements, Waypoints);
+            interpolator.Interpolate(ref DasMeasurements, Waypoints);
 
             for(int i = 0; i < 2; ++i) {
                 Assert.Equal(avg, DasMeasurements[i].Time);
@@ -97,7 +97,7 @@ namespace REScan.MCode.Tests
             var size = DasMeasurements.Count;
 
             Interpolator interpolator = new Interpolator();
-            interpolator.Interpolate(DasMeasurements, Waypoints);
+            interpolator.Interpolate(ref DasMeasurements, Waypoints);
 
             Assert.Equal(12, DasMeasurements.Count);
 
@@ -105,16 +105,16 @@ namespace REScan.MCode.Tests
             Assert.Equal(8, DasMeasurements[0].Ecio);
             Assert.Equal("B", DasMeasurements[1].TransmitterCode);
             Assert.Equal(9, DasMeasurements[1].Ecio);
-            Assert.Equal("B", DasMeasurements[2].TransmitterCode);
-            Assert.Equal(27, DasMeasurements[2].Ecio);
-            Assert.Equal("A", DasMeasurements[3].TransmitterCode);
-            Assert.Equal(29, DasMeasurements[3].Ecio);
+            Assert.Equal("B", DasMeasurements[3].TransmitterCode);
+            Assert.Equal(27, DasMeasurements[3].Ecio);
+            Assert.Equal("A", DasMeasurements[2].TransmitterCode);
+            Assert.Equal(29, DasMeasurements[2].Ecio);
         }
        [Fact]
         void TestInterpolation() {
             Reset();
             Interpolator interpolator = new Interpolator();
-            interpolator.Interpolate(Measurements, Waypoints);
+            interpolator.Interpolate(ref Measurements, Waypoints);
             int i = 0;
             foreach(var meas in Measurements) {
                 Assert.Equal(100 + i, meas.Lat);
