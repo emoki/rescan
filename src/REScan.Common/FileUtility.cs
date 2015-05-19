@@ -32,7 +32,7 @@ namespace REScan.Common {
             return null;
         }
         public static bool DoesExtensionMatch(string fileName, string extension) {
-            return Path.GetExtension(fileName) == extension;
+            return Path.GetExtension(fileName) == ("." + extension);
         }
     }
 }
