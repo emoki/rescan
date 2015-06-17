@@ -15,7 +15,7 @@ namespace REScan.Data
             PixelX = double.NaN;
             PixelY = double.NaN;
             Time = long.MinValue;
-            Height = int.MinValue;
+            Height = double.NaN;
             IsGpsLocked = false;
         }
         public virtual bool Uninitialized() {
@@ -33,7 +33,7 @@ namespace REScan.Data
         public double PixelX;
         public double PixelY;
         public long Time;
-        public int Height;
+        public double Height;
         public bool IsGpsLocked;
     }
 }

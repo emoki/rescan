@@ -210,7 +210,7 @@ namespace REScan.MCode
             meas.PixelY = wpt1.PixelY + (wpt2.PixelY - wpt1.PixelY) * ratio;
             meas.Lat = wpt1.Lat + (wpt2.Lat - wpt1.Lat) * ratio;
             meas.Lon = wpt1.Lon + (wpt2.Lon - wpt1.Lon) * ratio;
-            meas.Height = (int)Math.Round(wpt1.Height + (wpt2.Height - wpt1.Height) * ratio, 0);
+            meas.Height = Math.Round(wpt1.Height + (wpt2.Height - wpt1.Height) * ratio, 1);
             meas.IsInterpolated = true;
         }
  
