@@ -110,8 +110,15 @@ namespace REScan.IO
             }
         }
         protected virtual void outputRedeyeAnalysisHeader(TextWriter writer) {
-            writer.WriteLine("FileName\tUmtsAsnVersion1.0.0Latitude\tLongitude\tScannerID\tDate\tTime\tHGT_AGL\tMeasCount\tUARFCN\tCenterFreq\tCarrierSL\tBroadcastCode\tCPICH RSCP\tInterference\tSecCode");
+            writer.Write("FileName\tUmtsAsnVersion1.0.0Latitude\tLongitude\tScannerID\tDate\tTime\tHGT_AGL\tGpsLock\tMeasCount\tUARFCN\tCenterFreq\tCarrierSL\tBroadcastCode\tCPICH RSCP\tInterference\tSecCode");
+            outputDerivedRedeyeAnalysisHeader(writer);
+            writer.WriteLine();
         }
+
+        protected virtual void outputDerivedRedeyeAnalysisHeader(TextWriter writer) {
+            return;
+        }
+
         protected virtual void outputRedEyeAnalysisFormat(TextWriter writer, T meas, Meta meta) {
             string s = "";
             s += meta.Filename; s += RedeyeDelimiter;
@@ -123,6 +130,7 @@ namespace REScan.IO
             s += dt1970.ToShortDateString(); s += RedeyeDelimiter;
             s += dt1970.ToString("HH:mm:ss"); s += RedeyeDelimiter;
             s += meas.Height; s += RedeyeDelimiter;
+            s += meas.IsGpsLocked.ToString();
             writer.Write(s);
         }
         protected int MaxHeaderLength = 10240;

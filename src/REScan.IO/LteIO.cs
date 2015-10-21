@@ -105,9 +105,13 @@ namespace REScan.IO {
         protected override int BinaryStructByteSize() {
             return 182;
         }
+        protected override void outputDerivedRedeyeAnalysisHeader(TextWriter writer) {
+            writer.Write("\tRSRP\tRSRQ\tRSSI\tSyncSL\tSyncQuality");
+        }
         protected override void outputRedEyeAnalysisFormat(TextWriter writer, Lte meas, Meta meta) {
             base.outputRedEyeAnalysisFormat(writer, meas, meta);
             string s = "";
+            s += RedeyeDelimiter;
             s += meas.CollectionRound; s += RedeyeDelimiter;
             s += meas.Channel; s += RedeyeDelimiter;
             s += meas.Frequency / 1e6; s += RedeyeDelimiter;
@@ -115,7 +119,12 @@ namespace REScan.IO {
             s += meas.PhysicalCellid; s += RedeyeDelimiter;
             s += meas.Rsrp; s += RedeyeDelimiter;
             s += meas.Rsrq; s += RedeyeDelimiter;
-            s += "l_"; s += meas.PhysicalCellid; s += "_"; s += (meas.Frequency / 1e5).ToString("00000"); s = s.Insert(s.Length - 1, "_");
+            s += "l_"; s += meas.PhysicalCellid; s += "_"; s += (meas.Frequency / 1e5).ToString("00000"); s = s.Insert(s.Length - 1, "_"); s += RedeyeDelimiter;
+            s += meas.Rsrp; s += RedeyeDelimiter;
+            s += meas.Rsrq; s += RedeyeDelimiter;
+            s += meas.Rssi; s += RedeyeDelimiter;
+            s += meas.SyncSignalLevel; s += RedeyeDelimiter;
+            s += meas.SyncQuality; s += RedeyeDelimiter;
             writer.WriteLine(s);
         }
 

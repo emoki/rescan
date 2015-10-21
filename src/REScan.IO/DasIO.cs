@@ -117,12 +117,10 @@ namespace REScan.IO {
             // Implement once REScan is using the newest das_processor.dll.
             throw new NotImplementedException();
         }
-        protected override void outputRedeyeAnalysisHeader(TextWriter writer) {
-            writer.WriteLine("FileName\tUmtsAsnVersion1.0.0Latitude\tLongitude\tScannerID\tDate\tTime\tHGT_AGL\tMeasCount\tUARFCN\tCenterFreq\tCarrierSL\tBroadcastCode\tCPICH RSCP\tInterference\tSecCode");
-        }
         protected override void outputRedEyeAnalysisFormat(TextWriter writer, Das meas, Meta meta) {
             base.outputRedEyeAnalysisFormat(writer, meas, meta);
             string s = "";
+            s += RedeyeDelimiter;
             s += meas.CollectionRound; s += RedeyeDelimiter;
             s += 111; s += RedeyeDelimiter;
             s += meas.Frequency / 1e6; s += RedeyeDelimiter;

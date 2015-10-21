@@ -120,6 +120,7 @@ namespace REScan.IO {
         protected override void outputRedEyeAnalysisFormat(TextWriter writer, Gsm meas, Meta meta) {
             base.outputRedEyeAnalysisFormat(writer, meas, meta);
             string s = "";
+            s += RedeyeDelimiter;
             s += meas.CollectionRound; s += RedeyeDelimiter;
             s += meas.Channel; s += RedeyeDelimiter;
             s += meas.Frequency / 1e6; s += RedeyeDelimiter;
