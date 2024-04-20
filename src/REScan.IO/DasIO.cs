@@ -128,7 +128,9 @@ namespace REScan.IO {
             s += meas.TransmitterCode; s += RedeyeDelimiter;
             s += meas.TransmitterSignalLevel; s += RedeyeDelimiter;
             s += meas.Ecio; s += RedeyeDelimiter;
-            s += "d_"; s += meas.TransmitterCode; s += "_"; s += (meas.Frequency / 1e5).ToString("00000"); s = s.Insert(s.Length - 1, "_");
+            s += "d_"; s += meas.TransmitterCode; s += "_"; s += (meas.Frequency / 1e5).ToString("00000"); s = s.Insert(s.Length - 1, "_"); s += RedeyeDelimiter;
+            s += meas.PixelX; s += RedeyeDelimiter;
+            s += meas.PixelY; 
             writer.WriteLine(s);
         }
         protected enum Version {

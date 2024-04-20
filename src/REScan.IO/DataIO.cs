@@ -110,7 +110,7 @@ namespace REScan.IO
             }
         }
         protected virtual void outputRedeyeAnalysisHeader(TextWriter writer) {
-            writer.Write("FileName\tUmtsAsnVersion1.0.0Latitude\tLongitude\tScannerID\tDate\tTime\tHGT_AGL\tGpsLock\tMeasCount\tUARFCN\tCenterFreq\tCarrierSL\tBroadcastCode\tCPICH RSCP\tInterference\tSecCode");
+            writer.Write("FileName\tUmtsAsnVersion1.0.0Latitude\tLongitude\tScannerID\tDate\tTime\tHGT_AGL\tGpsLock\tMeasCount\tUARFCN\tCenterFreq\tCarrierSL\tBroadcastCode\tCPICH RSCP\tInterference\tSecCode\tPixelX\tPixelY");
             outputDerivedRedeyeAnalysisHeader(writer);
             writer.WriteLine();
         }
