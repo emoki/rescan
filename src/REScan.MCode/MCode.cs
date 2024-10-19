@@ -13,7 +13,7 @@ namespace REScan.MCode
         // Interpolation will assign a position to each measurement using time, based on the waypoint before and after the measurement.
         // Measurements that exist outside the first and last waypoint are removed.  
         // Note - We currently sort both the measurement list and waypoint list.
-        public void Interpolate<T>(ref List<T> measurements, List<Waypoint> waypoints) where T : Measurement {
+        public void Interpolate<T>(ref List<T> measurements, List<Waypoint> waypoints, long startTimeOffset = 0) where T : Measurement {
             if(measurements.Count < 1)
                 throw new ArgumentException("Unable to interpolate.  Measurement list is empty.");
             if(waypoints.Count < 1)
@@ -29,8 +29,11 @@ namespace REScan.MCode
             RemoveOldMeasurementsUsingCollectionRound(measurements);
 
             measurements.Sort((meas1, meas2) => meas1.Time.CompareTo(meas2.Time));
-            measurements.Sort((meas1, meas2) => meas1.CollectionRound.CompareTo(meas2.CollectionRound));            
+            measurements.Sort((meas1, meas2) => meas1.CollectionRound.CompareTo(meas2.CollectionRound));
             waypoints.Sort((wpt1, wpt2) => wpt1.Time.CompareTo(wpt2.Time));
+
+            // Apply a time offset if required. Currently used for pctel since it's time is not synced directly to the scanner.
+            FixPctellTime(measurements, waypoints, startTimeOffset);
 
             // We make sure all measurements within X collection rounds have the same time.  This ensures they receive the same interpolated
             // position when interpolating.
@@ -66,6 +69,22 @@ namespace REScan.MCode
                 } 
             }
         }
+        private static void FixPctellTime<T>(List<T> measurements, List<Waypoint> waypoints, long startTimeOffset) where T : Measurement
+        {
+            // Calculate the difference from first waypoint to first pctel measurement and use as offset unless startOffset was manually specified.
+            if(measurements[0] is Pctel) {
+                var offset = waypoints[0].Time - measurements[0].Time;
+                
+                if (startTimeOffset != 0)
+                    offset = startTimeOffset - measurements[0].Time;
+
+                foreach (var meas in measurements)
+                {
+                    meas.Time += offset;
+                }
+            }
+        }
+
         private void BinTimeUsingCollectionRound<T>(List<T> measurements) where T : Measurement  {
             // Due to our DAS gain algorithm during collection, to properly compare measurements 
             // during analysis we need to group by every 2 collection rounds % 2.
