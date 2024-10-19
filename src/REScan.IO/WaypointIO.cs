@@ -14,7 +14,7 @@ namespace REScan.IO {
         public override string Extension() {
             return FileUtility.WaypointExtension();
         }
-        public override string REAnalysisExtension() {
+        public override string REAnalysisExtension(bool useSecondaryExtension = false) {
             throw new NotSupportedException(DataType() + " does not support REAnalysis format.");
         }
         protected override string Header() {
