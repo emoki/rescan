@@ -13,6 +13,7 @@ namespace REScan.Common {
         public static string GsmExtension() { return "wnd"; }
         public static string WcdmaExtension() { return "wnu"; }
         public static string LteExtension() { return "wnl"; }
+        public static string PctelExtension() { return "pctel.csv"; }
         public static string REAnalysisExtension() { return "wna"; }
         public static List<string> FindValidFiles(List<string> fileNames, string extension) {
             var newFileNames = new List<string>();
