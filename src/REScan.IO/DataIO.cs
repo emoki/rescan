@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.IO;
 using REScan.Common;
 using REScan.Data;
+using System.Runtime.Remoting.Messaging;
 
 namespace REScan.IO
 {
@@ -13,7 +14,7 @@ namespace REScan.IO
     {
         public abstract string DataType();
         public abstract string Extension();
-        public virtual string REAnalysisExtension() {
+        public virtual string REAnalysisExtension(bool useSecondaryExtension = false) {
             return Extension() + "." + FileUtility.REAnalysisExtension();
         }
         protected abstract string Header();
@@ -45,16 +46,23 @@ namespace REScan.IO
             // Using the header this function determines which file version we are reading in.  Therefore
             // it only needs to be overriden by classes that have multiple versions.
         }
+        protected virtual void SkipTextHeader(TextReader reader) {
+            var stringHeader = reader.ReadLine();
+        }
+        protected virtual void SkipBinaryHeader(BinaryReader reader) {
+            // Skip ahead to the beginning of the binary data.  Every header has a carriage return appended
+            // so there will at least be one byte to read.
+            while (reader.BaseStream.Position != reader.BaseStream.Length && reader.ReadByte() != 0x0A) { }
+        }
         protected virtual List<T> ReadTextFile(string fileName) {
             List<T> records = new List<T>();
 
             using(TextReader reader = new StreamReader(fileName)) {
 
-                // Skip header.
-                var stringHeader = reader.ReadLine();
+                SkipTextHeader(reader);
 
                 // Begin populating records till end of file. 
-                while(reader.Peek() != -1) {
+                while (reader.Peek() != -1) {
                     try {
                        var record = Parse(reader.ReadLine());
                        records.Add(record);
@@ -72,9 +80,7 @@ namespace REScan.IO
 
             using(BinaryReader reader = new BinaryReader(File.OpenRead(fileName))) {
 
-                // Skip ahead to the beginning of the binary data.  Every header has a carriage return appended
-                // so there will at least be one byte to read.
-                while(reader.BaseStream.Position != reader.BaseStream.Length && reader.ReadByte() != 0x0A) {} 
+                SkipBinaryHeader(reader);
 
                 // Begin populating records till end of file. 
                 while(reader.BaseStream.Position != reader.BaseStream.Length) {
